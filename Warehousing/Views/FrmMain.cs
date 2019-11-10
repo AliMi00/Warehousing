@@ -74,9 +74,9 @@ namespace Warehousing.Views
         private async void btnAddProduct_Click(object sender, EventArgs e)
         {
             Product product = new Product();
-            product.Code = txtAddProductCode.Text;
-            product.Name = txtAddProductName.Text;
-            product.Quantity =Convert.ToInt32( txtAddProductQuantity.Text);
+            product.Code = txtAddProductCode.Text.ToLower().Trim();
+            product.Name = txtAddProductName.Text.Trim();
+            product.Quantity =Convert.ToInt32( txtAddProductQuantity.Text.Trim());
             try
             {
                 await GetAndSetData.SetProduct(product);
@@ -128,7 +128,7 @@ namespace Warehousing.Views
                     await UpdateProductListAndSold();
                 }
 
-                ListProducts = products.Where(x => x.Name.StartsWith(txtAddSearchName.Text.ToString().Trim())).ToList<Product>();
+                ListProducts = products.Where(x => x.Name.Contains(txtAddSearchName.Text.ToString().Trim())).ToList<Product>();
                 dgvAddProductList.DataSource = ListProducts;
 
             }
@@ -181,8 +181,8 @@ namespace Warehousing.Views
         private async void btnChangeIncrease_Click(object sender, EventArgs e)
         {
             Product product = new Product();
-            product.Code = txtSellCode.Text;
-            product.Quantity = Convert.ToInt32(txtSellQuantity.Text);
+            product.Code = txtSellCode.Text.ToLower().Trim();
+            product.Quantity = Convert.ToInt32(txtSellQuantity.Text.Trim());
             try
             {
                 await GetAndSetData.IncreaseProductQuantity(product);
@@ -190,9 +190,14 @@ namespace Warehousing.Views
                                         "موفق",
                                         MessageBoxButtons.OK,
                                         MessageBoxIcon.Information);
+                await UpdateProductListAndSold();
+                txtSellCode.Text = "";
+                txtSellName.Text = "";
+                txtSellQuantity.Text = "";
+
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message + "\n",
                                     "خطا",
@@ -204,8 +209,8 @@ namespace Warehousing.Views
         private async void btnChangeDecrease_Click(object sender, EventArgs e)
         {
             Product product = new Product();
-            product.Code = txtSellCode.Text;
-            product.Quantity = Convert.ToInt32(txtSellQuantity.Text);
+            product.Code = txtSellCode.Text.ToLower().Trim();
+            product.Quantity = Convert.ToInt32(txtSellQuantity.Text.Trim());
             try
             {
                 await GetAndSetData.DecreaseProductQuantity(product);
@@ -213,7 +218,10 @@ namespace Warehousing.Views
                                         "موفق",
                                         MessageBoxButtons.OK,
                                         MessageBoxIcon.Information);
-
+                await UpdateProductListAndSold();
+                txtSellCode.Text = "";
+                txtSellName.Text = "";
+                txtSellQuantity.Text = "";
             }
             catch (Exception ex)
             {
@@ -255,6 +263,58 @@ namespace Warehousing.Views
             }
             await GetStatus();
             await UpdateProductListAndSold();
+
+        }
+
+        private async void txtSellCode_TextChanged(object sender, EventArgs e)
+        {
+            List<Product> ListProducts = products;
+            try
+            {
+                if (txtAddSearchCode.Text.Equals(""))
+                {
+                    await UpdateProductListAndSold();
+                }
+
+                ListProducts = products.Where(x => x.Code.StartsWith(txtAddSearchCode.Text.ToString().Trim())).ToList<Product>();
+                dgvSellProduct.DataSource = ListProducts;
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private async void txtSellName_TextChanged(object sender, EventArgs e)
+        {
+            List<Product> ListProducts = products;
+            try
+            {
+                if (txtAddSearchName.Text.Equals(""))
+                {
+                    await UpdateProductListAndSold();
+                }
+
+                ListProducts = products.Where(x => x.Name.Contains(txtAddSearchName.Text.ToString().Trim())).ToList<Product>();
+                dgvSellProduct.DataSource = ListProducts;
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void dgvSellProduct_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dgvAddProductList.SelectedRows.Count == 1)
+            {
+                int Id = Convert.ToInt32(dgvAddProductList[0, dgvSellProduct.SelectedRows[0].Index].Value);
+                Product product = products.Single<Product>(x => x.Id.Equals(Id));
+                txtSellCode.Text = product.Code;
+                txtSellName.Text = product.Name;
+            }
 
         }
     }

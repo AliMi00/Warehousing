@@ -140,16 +140,16 @@ namespace Warehousing.Services
             try
             {
                 List<Product> products = await GetProductsAsync();
-                if (products.Where(x => x.Id == product.Id).Any() &&
-                    products.Single<Product>(x => x.Code == product.Code).Quantity >= product.Quantity)
+                if (products.Where(x => x.Code.Equals( product.Code)).Any() &&
+                    products.Where(x => x.Code.Equals(product.Code)).FirstOrDefault<Product>().Quantity >= product.Quantity)
                 {
-                    int quantity = products.Single<Product>(x => x.Code.Equals(product.Code)).Quantity - product.Quantity;
-                    int Id = products.Single<Product>(x => x.Code.Equals(product.Code)).Id;
+                    int quantity = products.Where(x => x.Code.Equals(product.Code)).FirstOrDefault<Product>().Quantity - product.Quantity;
+                    int Id = products.Where(x => x.Code.Equals(product.Code)).FirstOrDefault<Product>().Id;
 
                     sqlParameters.Add(new SqlParameter("Quantity", quantity));
                     sqlParameters.Add(new SqlParameter("Id", Id));
                     await DataAccessAsync.ExecSPAsync("DecreaseQuantityProduct", sqlParameters);
-
+                    
                 }
                 else
                     throw new Exception("محصول به تعداد کافی موجود نیست");

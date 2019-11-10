@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea9 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend9 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series17 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series18 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.WareHousControlTab = new System.Windows.Forms.TabPage();
             this.panel5 = new System.Windows.Forms.Panel();
@@ -144,6 +144,7 @@
             this.dgvSellProduct.Name = "dgvSellProduct";
             this.dgvSellProduct.Size = new System.Drawing.Size(1028, 417);
             this.dgvSellProduct.TabIndex = 0;
+            this.dgvSellProduct.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSellProduct_CellClick);
             // 
             // panel4
             // 
@@ -201,7 +202,7 @@
             this.txtSellQuantity.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtSellQuantity.Name = "txtSellQuantity";
             this.txtSellQuantity.Size = new System.Drawing.Size(181, 22);
-            this.txtSellQuantity.TabIndex = 9;
+            this.txtSellQuantity.TabIndex = 2;
             // 
             // label11
             // 
@@ -223,7 +224,8 @@
             this.txtSellName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtSellName.Name = "txtSellName";
             this.txtSellName.Size = new System.Drawing.Size(271, 22);
-            this.txtSellName.TabIndex = 11;
+            this.txtSellName.TabIndex = 4;
+            this.txtSellName.TextChanged += new System.EventHandler(this.txtSellName_TextChanged);
             // 
             // label12
             // 
@@ -245,14 +247,15 @@
             this.txtSellCode.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtSellCode.Name = "txtSellCode";
             this.txtSellCode.Size = new System.Drawing.Size(225, 22);
-            this.txtSellCode.TabIndex = 17;
+            this.txtSellCode.TabIndex = 0;
+            this.txtSellCode.TextChanged += new System.EventHandler(this.txtSellCode_TextChanged);
             // 
             // btnChangeDecrease
             // 
             this.btnChangeDecrease.Location = new System.Drawing.Point(15, 24);
             this.btnChangeDecrease.Name = "btnChangeDecrease";
             this.btnChangeDecrease.Size = new System.Drawing.Size(55, 42);
-            this.btnChangeDecrease.TabIndex = 8;
+            this.btnChangeDecrease.TabIndex = 0;
             this.btnChangeDecrease.Text = "کاهش";
             this.btnChangeDecrease.UseVisualStyleBackColor = true;
             this.btnChangeDecrease.Click += new System.EventHandler(this.btnChangeDecrease_Click);
@@ -262,7 +265,7 @@
             this.btnChangeIncrease.Location = new System.Drawing.Point(76, 24);
             this.btnChangeIncrease.Name = "btnChangeIncrease";
             this.btnChangeIncrease.Size = new System.Drawing.Size(55, 42);
-            this.btnChangeIncrease.TabIndex = 7;
+            this.btnChangeIncrease.TabIndex = 1;
             this.btnChangeIncrease.Text = "افزایش";
             this.btnChangeIncrease.UseVisualStyleBackColor = true;
             this.btnChangeIncrease.Click += new System.EventHandler(this.btnChangeIncrease_Click);
@@ -300,21 +303,21 @@
             // 
             // Chart
             // 
-            chartArea3.Name = "ChartArea1";
-            this.Chart.ChartAreas.Add(chartArea3);
+            chartArea9.Name = "ChartArea1";
+            this.Chart.ChartAreas.Add(chartArea9);
             this.Chart.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend3.Name = "Legend1";
-            this.Chart.Legends.Add(legend3);
+            legend9.Name = "Legend1";
+            this.Chart.Legends.Add(legend9);
             this.Chart.Location = new System.Drawing.Point(0, 0);
             this.Chart.Name = "Chart";
-            series5.ChartArea = "ChartArea1";
-            series5.Legend = "Legend1";
-            series5.Name = "Product";
-            series6.ChartArea = "ChartArea1";
-            series6.Legend = "Legend1";
-            series6.Name = "Sold";
-            this.Chart.Series.Add(series5);
-            this.Chart.Series.Add(series6);
+            series17.ChartArea = "ChartArea1";
+            series17.Legend = "Legend1";
+            series17.Name = "Product";
+            series18.ChartArea = "ChartArea1";
+            series18.Legend = "Legend1";
+            series18.Name = "Sold";
+            this.Chart.Series.Add(series17);
+            this.Chart.Series.Add(series18);
             this.Chart.Size = new System.Drawing.Size(1028, 519);
             this.Chart.TabIndex = 0;
             this.Chart.Text = "chart1";
@@ -398,7 +401,7 @@
             this.btnAddUpdateProduct.Location = new System.Drawing.Point(14, 8);
             this.btnAddUpdateProduct.Name = "btnAddUpdateProduct";
             this.btnAddUpdateProduct.Size = new System.Drawing.Size(112, 28);
-            this.btnAddUpdateProduct.TabIndex = 18;
+            this.btnAddUpdateProduct.TabIndex = 0;
             this.btnAddUpdateProduct.Text = "حذف محصول ";
             this.btnAddUpdateProduct.UseVisualStyleBackColor = true;
             this.btnAddUpdateProduct.Click += new System.EventHandler(this.btnAddUpdateProduct_Click);
@@ -440,7 +443,7 @@
             this.txtAddSearchCode.Location = new System.Drawing.Point(324, 3);
             this.txtAddSearchCode.Name = "txtAddSearchCode";
             this.txtAddSearchCode.Size = new System.Drawing.Size(251, 21);
-            this.txtAddSearchCode.TabIndex = 2;
+            this.txtAddSearchCode.TabIndex = 0;
             this.txtAddSearchCode.TextChanged += new System.EventHandler(this.txtAddSearchCode_TextChanged);
             // 
             // txtAddSearchName
@@ -449,7 +452,7 @@
             this.txtAddSearchName.Location = new System.Drawing.Point(3, 3);
             this.txtAddSearchName.Name = "txtAddSearchName";
             this.txtAddSearchName.Size = new System.Drawing.Size(185, 21);
-            this.txtAddSearchName.TabIndex = 3;
+            this.txtAddSearchName.TabIndex = 1;
             this.txtAddSearchName.TextChanged += new System.EventHandler(this.txtAddSearchName_TextChanged);
             // 
             // label5
@@ -518,7 +521,7 @@
             this.txtAddProductQuantity.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtAddProductQuantity.Name = "txtAddProductQuantity";
             this.txtAddProductQuantity.Size = new System.Drawing.Size(186, 22);
-            this.txtAddProductQuantity.TabIndex = 9;
+            this.txtAddProductQuantity.TabIndex = 2;
             // 
             // label3
             // 
@@ -540,7 +543,7 @@
             this.txtAddProductName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtAddProductName.Name = "txtAddProductName";
             this.txtAddProductName.Size = new System.Drawing.Size(278, 22);
-            this.txtAddProductName.TabIndex = 11;
+            this.txtAddProductName.TabIndex = 1;
             // 
             // label2
             // 
@@ -562,7 +565,7 @@
             this.txtAddProductCode.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtAddProductCode.Name = "txtAddProductCode";
             this.txtAddProductCode.Size = new System.Drawing.Size(231, 22);
-            this.txtAddProductCode.TabIndex = 17;
+            this.txtAddProductCode.TabIndex = 0;
             // 
             // btnAddProduct
             // 
@@ -570,7 +573,7 @@
             this.btnAddProduct.Location = new System.Drawing.Point(14, 29);
             this.btnAddProduct.Name = "btnAddProduct";
             this.btnAddProduct.Size = new System.Drawing.Size(82, 29);
-            this.btnAddProduct.TabIndex = 17;
+            this.btnAddProduct.TabIndex = 0;
             this.btnAddProduct.Text = "افزودن";
             this.btnAddProduct.UseVisualStyleBackColor = true;
             this.btnAddProduct.Click += new System.EventHandler(this.btnAddProduct_Click);
