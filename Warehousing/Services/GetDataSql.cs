@@ -1,21 +1,18 @@
-﻿using Dapper;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Data.SQLite;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Warehousing.Models;
 
-
 namespace Warehousing.Services
 {
-    public static class GetAndSetData
+      public static class GetDataSql
     {
+        public static string ConfigurationManage { get; private set; }
 
         //listToTable
         public static DataTable ListToDataTable<T>(this IList<T> data)
@@ -84,36 +81,33 @@ namespace Warehousing.Services
         //get product
         public static async Task<List<Product>> GetProductsAsync()
         {
-            using(IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
-            {
-                var output =await cnn.QueryAsync<Product>("Select * From Products", new DynamicParameters());
-                return output.ToList();
-            }
 
+
+            List<Product> products = new List<Product>();
+            DataTable dtProduct = await DataAccessAsync.ExecSPAsync("GetProducts");
+            //check info
+            return DataTableToList<Product>(dtProduct);
         }
         // Get Sold product 
         public static async Task<List<SoldProduct>> GetSoldProductsAsync()
         {
-            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
-            {
-                var output = await cnn.QueryAsync<SoldProduct>("Select * From SoldProduct", new DynamicParameters());
-                return output.ToList();
-            }
+            List<SoldProduct> soldProducts = new List<SoldProduct>();
+            DataTable dtProduct = await DataAccessAsync.ExecSPAsync("GetSoldProducts");
+            //check info
+            return DataTableToList<SoldProduct>(dtProduct);
         }
         //set product and check it's new
         public static async Task SetProduct(Product product)
         {
+            List<SqlParameter> sqlParameters = new List<SqlParameter>();
+            sqlParameters.Add(new SqlParameter("Code", product.Code));
+            sqlParameters.Add(new SqlParameter("Name", product.Name));
+            sqlParameters.Add(new SqlParameter("Quantity", product.Quantity));
             try
             {
                 List<Product> products = await GetProductsAsync();
                 if (!products.Where(x => x.Code == product.Code).Any())
-                {
-                    using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
-                    {
-                        await cnn.ExecuteAsync("insert into Products(Code,Name,Quantity) values(@Code, @Name, @Quantity)", new DynamicParameters(product));
-
-                    }
-                }
+                    await DataAccessAsync.ExecSPAsync("SetProduct", sqlParameters);
                 else
                     throw new Exception("محصول با این کد موجود است");
             }
@@ -126,17 +120,14 @@ namespace Warehousing.Services
         //Delete product 
         public static async Task DeleteProduct(Product product)
         {
+            List<SqlParameter> sqlParameters = new List<SqlParameter>();
+            sqlParameters.Add(new SqlParameter("Id", product.Id));
+
             try
             {
                 List<Product> products = await GetProductsAsync();
                 if (products.Where(x => x.Id == product.Id).Any())
-                {
-                    using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
-                    {
-                        await cnn.ExecuteAsync("	delete Products where Id = @Id", new DynamicParameters(product));
-
-                    }
-                }    
+                    await DataAccessAsync.ExecSPAsync("DeleteProduct", sqlParameters);
                 else
                     throw new Exception("محصول موجود نیست");
             }
@@ -148,24 +139,19 @@ namespace Warehousing.Services
         //decrease product quantity and add sold product 
         public static async Task DecreaseProductQuantity(Product product)
         {
+            List<SqlParameter> sqlParameters = new List<SqlParameter>();
             try
             {
                 List<Product> products = await GetProductsAsync();
-                if (products.Where(x => x.Code.Equals( product.Code)).Any() &&
+                if (products.Where(x => x.Code.Equals(product.Code)).Any() &&
                     products.Where(x => x.Code.Equals(product.Code)).FirstOrDefault<Product>().Quantity >= product.Quantity)
                 {
                     int quantity = products.Where(x => x.Code.Equals(product.Code)).FirstOrDefault<Product>().Quantity - product.Quantity;
                     int Id = products.Where(x => x.Code.Equals(product.Code)).FirstOrDefault<Product>().Id;
 
-                    DynamicParameters parameters = new DynamicParameters();
-                    parameters.Add("Quantity", quantity);
-                    parameters.Add("Id", Id);
-                    parameters.Add("QuantitySold",product.Quantity);
-                    using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
-                    {
-                        await cnn.ExecuteAsync(" BEGIN TRANSACTION; Update Products set  Quantity = @Quantity where Id = @Id ;" +
-                            " insert into SoldProduct(ProductId, Quantity) values(@Id, @QuantitySold); commit;", parameters) ;
-                    }
+                    sqlParameters.Add(new SqlParameter("Quantity", quantity));
+                    sqlParameters.Add(new SqlParameter("Id", Id));
+                    await DataAccessAsync.ExecSPAsync("DecreaseQuantityProduct", sqlParameters);
 
                 }
                 else
@@ -179,6 +165,7 @@ namespace Warehousing.Services
         //Increase product quantity
         public static async Task IncreaseProductQuantity(Product product)
         {
+            List<SqlParameter> sqlParameters = new List<SqlParameter>();
             try
             {
                 List<Product> products = await GetProductsAsync();
@@ -186,14 +173,9 @@ namespace Warehousing.Services
                 {
                     int quantity = products.Single<Product>(x => x.Code.Equals(product.Code)).Quantity + product.Quantity;
                     int Id = products.Single<Product>(x => x.Code.Equals(product.Code)).Id;
-
-                    DynamicParameters parameters = new DynamicParameters();
-                    parameters.Add("Quantity", quantity);
-                    parameters.Add("Id", Id);
-                    using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
-                    {
-                        await cnn.ExecuteAsync("Update Products set  Quantity = @Quantity where Id = @Id", parameters);
-                    }
+                    sqlParameters.Add(new SqlParameter("Id", Id));
+                    sqlParameters.Add(new SqlParameter("Quantity", quantity));
+                    await DataAccessAsync.ExecSPAsync("IncreaseQuantityProduct", sqlParameters);
                 }
                 else
                     throw new Exception("محصول به تعداد کافی موجود نیست");
@@ -202,11 +184,6 @@ namespace Warehousing.Services
             {
                 throw new Exception(" مشکل در ثبت محصول " + "/n" + ex.Message);
             }
-        }
-
-        private static string LoadConnectionString(string id = "Default")
-        {
-            return ConfigurationManager.ConnectionStrings[id].ConnectionString;
         }
     }
 }

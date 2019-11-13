@@ -44,6 +44,8 @@ namespace Warehousing.Views
             dgvSellProduct.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dgvSellProduct.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dgvSellProduct.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dgvSellProduct.AllowUserToOrderColumns = true;
+            
 
             dgvAddProductList.Columns[0].Visible = false;
             dgvAddProductList.Columns[1].HeaderText = "کد کالا ";
@@ -52,6 +54,8 @@ namespace Warehousing.Views
             dgvAddProductList.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dgvAddProductList.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dgvAddProductList.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dgvAddProductList.AllowUserToOrderColumns = true;
+
 
             dgvStoreStatus.Columns[0].Visible = false;
             dgvStoreStatus.Columns[1].HeaderText = "کد کالا ";
@@ -62,6 +66,13 @@ namespace Warehousing.Views
             dgvStoreStatus.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dgvStoreStatus.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             dgvStoreStatus.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dgvStoreStatus.AllowUserToOrderColumns = true;
+            foreach (DataGridViewColumn column in dgvStoreStatus.Columns)
+            {
+
+                column.SortMode = DataGridViewColumnSortMode.Automatic;
+            }
+
         }
         private async void FrmMain_Load(object sender, EventArgs e)
         {
@@ -231,26 +242,95 @@ namespace Warehousing.Views
                                     MessageBoxIcon.Error);
             }
         }
-//Status
+        private async void txtSellCode_TextChanged(object sender, EventArgs e)
+        {
+            List<Product> ListProducts = products;
+            try
+            {
+                if (txtSellCode.Text.Equals(""))
+                {
+                    await UpdateProductListAndSold();
+                }
+
+                ListProducts = products.Where(x => x.Code.StartsWith(txtSellCode.Text.Trim())).ToList();
+                dgvSellProduct.DataSource = ListProducts;
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private async void txtSellName_TextChanged(object sender, EventArgs e)
+        {
+            List<Product> ListProducts = products;
+            try
+            {
+                if (txtSellName.Text.Equals(""))
+                {
+                    await UpdateProductListAndSold();
+                }
+
+                ListProducts = products.Where(x => x.Name.Contains(txtSellName.Text.ToString().Trim())).ToList<Product>();
+                dgvSellProduct.DataSource = ListProducts;
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        //Status
         private async Task GetStatus()
         {
-            List<WareHousStatus> wareHousStatuses = new List<WareHousStatus>();
-            await UpdateProductListAndSold();
-            foreach(Product p in products)
+            if (rbtnShowAll.Checked)
             {
-                WareHousStatus wareHousStatus = new WareHousStatus();
-                Chart.Series[0].Points.AddXY(p.Name, p.Quantity);
-                int soldProduct = soldProducts.Where(x => x.ProductId.Equals(p.Id)).Sum(x => x.Quantity);
-                Chart.Series[1].Points.AddXY(p.Name, soldProduct);
-                wareHousStatus.Id = p.Id;
-                wareHousStatus.Code = p.Code;
-                wareHousStatus.Name = p.Name;
-                wareHousStatus.QuantityExist = p.Quantity;
-                wareHousStatus.QuantitySold = soldProduct;
-                wareHousStatuses.Add(wareHousStatus);
+                List<WareHousStatus> wareHousStatuses = new List<WareHousStatus>();
+                await UpdateProductListAndSold();
+                foreach(Product p in products)
+                {
+                    WareHousStatus wareHousStatus = new WareHousStatus();
+                    Chart.Series[0].Points.AddXY(p.Name, p.Quantity);
+                    int soldProduct = soldProducts.Where(x => x.ProductId.Equals(p.Id)).Sum(x => x.Quantity);
+                    Chart.Series[1].Points.AddXY(p.Name, soldProduct);
+                    wareHousStatus.Id = p.Id;
+                    wareHousStatus.Code = p.Code;
+                    wareHousStatus.Name = p.Name;
+                    wareHousStatus.QuantityExist = p.Quantity;
+                    wareHousStatus.QuantitySold = soldProduct;
+                    wareHousStatuses.Add(wareHousStatus);
                 
+                }
+                dgvStoreStatus.DataSource = wareHousStatuses;
+                foreach (DataGridViewColumn column in dgvStoreStatus.Columns)
+                {
+
+                    column.SortMode = DataGridViewColumnSortMode.Automatic;
+                }
             }
-            dgvStoreStatus.DataSource = wareHousStatuses;
+            else
+            {
+                List<WareHousStatus> wareHousStatuses = new List<WareHousStatus>();
+                await UpdateProductListAndSold();
+                foreach (Product p in products)
+                {
+                    WareHousStatus wareHousStatus = new WareHousStatus();
+                    Chart.Series[0].Points.AddXY(p.Name, p.Quantity);
+                    int soldProduct = soldProducts.Where(x => x.ProductId.Equals(p.Id)).Sum(x => x.Quantity);
+                    Chart.Series[1].Points.AddXY(p.Name, soldProduct);
+                    wareHousStatus.Id = p.Id;
+                    wareHousStatus.Code = p.Code;
+                    wareHousStatus.Name = p.Name;
+                    wareHousStatus.QuantityExist = p.Quantity;
+                    wareHousStatus.QuantitySold = soldProduct;
+                    if(wareHousStatus.QuantityExist != 0)
+                        wareHousStatuses.Add(wareHousStatus);
+
+                }
+                dgvStoreStatus.DataSource = wareHousStatuses;
+
+            }
 
 
         }
@@ -266,45 +346,7 @@ namespace Warehousing.Views
 
         }
 
-        private async void txtSellCode_TextChanged(object sender, EventArgs e)
-        {
-            List<Product> ListProducts = products;
-            try
-            {
-                if (txtAddSearchCode.Text.Equals(""))
-                {
-                    await UpdateProductListAndSold();
-                }
 
-                ListProducts = products.Where(x => x.Code.StartsWith(txtAddSearchCode.Text.ToString().Trim())).ToList<Product>();
-                dgvSellProduct.DataSource = ListProducts;
-
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
-
-        private async void txtSellName_TextChanged(object sender, EventArgs e)
-        {
-            List<Product> ListProducts = products;
-            try
-            {
-                if (txtAddSearchName.Text.Equals(""))
-                {
-                    await UpdateProductListAndSold();
-                }
-
-                ListProducts = products.Where(x => x.Name.Contains(txtAddSearchName.Text.ToString().Trim())).ToList<Product>();
-                dgvSellProduct.DataSource = ListProducts;
-
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
 
         private void dgvSellProduct_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -316,6 +358,17 @@ namespace Warehousing.Views
                 txtSellName.Text = product.Name;
             }
 
+        }
+
+
+        private async void rbtnShowAll_CheckedChanged(object sender, EventArgs e)
+        {
+            await GetStatus();
+        }
+
+        private async void rbtnShowExist_CheckedChanged(object sender, EventArgs e)
+        {
+            await GetStatus();
         }
     }
 }

@@ -28,10 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea9 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend9 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series17 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series18 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.WareHousControlTab = new System.Windows.Forms.TabPage();
             this.panel5 = new System.Windows.Forms.Panel();
@@ -51,6 +52,9 @@
             this.panel6 = new System.Windows.Forms.Panel();
             this.Chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.WareHousStatusTab2 = new System.Windows.Forms.TabPage();
+            this.panel8 = new System.Windows.Forms.Panel();
+            this.rbtnShowAll = new System.Windows.Forms.RadioButton();
+            this.rbtnShowExist = new System.Windows.Forms.RadioButton();
             this.panel7 = new System.Windows.Forms.Panel();
             this.dgvStoreStatus = new System.Windows.Forms.DataGridView();
             this.ProductsTab = new System.Windows.Forms.TabPage();
@@ -83,6 +87,7 @@
             this.panel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Chart)).BeginInit();
             this.WareHousStatusTab2.SuspendLayout();
+            this.panel8.SuspendLayout();
             this.panel7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvStoreStatus)).BeginInit();
             this.ProductsTab.SuspendLayout();
@@ -138,10 +143,17 @@
             // 
             // dgvSellProduct
             // 
+            this.dgvSellProduct.AllowUserToAddRows = false;
+            this.dgvSellProduct.AllowUserToDeleteRows = false;
+            this.dgvSellProduct.AllowUserToOrderColumns = true;
             this.dgvSellProduct.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvSellProduct.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvSellProduct.GridColor = System.Drawing.SystemColors.ControlLightLight;
+            this.dgvSellProduct.ImeMode = System.Windows.Forms.ImeMode.On;
             this.dgvSellProduct.Location = new System.Drawing.Point(0, 0);
+            this.dgvSellProduct.MultiSelect = false;
             this.dgvSellProduct.Name = "dgvSellProduct";
+            this.dgvSellProduct.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvSellProduct.Size = new System.Drawing.Size(1028, 417);
             this.dgvSellProduct.TabIndex = 0;
             this.dgvSellProduct.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSellProduct_CellClick);
@@ -157,7 +169,7 @@
             this.panel4.Location = new System.Drawing.Point(6, 6);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(1028, 84);
-            this.panel4.TabIndex = 0;
+            this.panel4.TabIndex = 1;
             // 
             // tableLayoutPanel3
             // 
@@ -202,7 +214,7 @@
             this.txtSellQuantity.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtSellQuantity.Name = "txtSellQuantity";
             this.txtSellQuantity.Size = new System.Drawing.Size(181, 22);
-            this.txtSellQuantity.TabIndex = 2;
+            this.txtSellQuantity.TabIndex = 3;
             // 
             // label11
             // 
@@ -224,7 +236,7 @@
             this.txtSellName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtSellName.Name = "txtSellName";
             this.txtSellName.Size = new System.Drawing.Size(271, 22);
-            this.txtSellName.TabIndex = 4;
+            this.txtSellName.TabIndex = 2;
             this.txtSellName.TextChanged += new System.EventHandler(this.txtSellName_TextChanged);
             // 
             // label12
@@ -235,7 +247,7 @@
             this.label12.Location = new System.Drawing.Point(536, 0);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(63, 29);
-            this.label12.TabIndex = 10;
+            this.label12.TabIndex = 5;
             this.label12.Text = "نام:";
             this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -247,7 +259,7 @@
             this.txtSellCode.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtSellCode.Name = "txtSellCode";
             this.txtSellCode.Size = new System.Drawing.Size(225, 22);
-            this.txtSellCode.TabIndex = 0;
+            this.txtSellCode.TabIndex = 1;
             this.txtSellCode.TextChanged += new System.EventHandler(this.txtSellCode_TextChanged);
             // 
             // btnChangeDecrease
@@ -303,27 +315,28 @@
             // 
             // Chart
             // 
-            chartArea9.Name = "ChartArea1";
-            this.Chart.ChartAreas.Add(chartArea9);
+            chartArea1.Name = "ChartArea1";
+            this.Chart.ChartAreas.Add(chartArea1);
             this.Chart.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend9.Name = "Legend1";
-            this.Chart.Legends.Add(legend9);
+            legend1.Name = "Legend1";
+            this.Chart.Legends.Add(legend1);
             this.Chart.Location = new System.Drawing.Point(0, 0);
             this.Chart.Name = "Chart";
-            series17.ChartArea = "ChartArea1";
-            series17.Legend = "Legend1";
-            series17.Name = "Product";
-            series18.ChartArea = "ChartArea1";
-            series18.Legend = "Legend1";
-            series18.Name = "Sold";
-            this.Chart.Series.Add(series17);
-            this.Chart.Series.Add(series18);
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "محصولات موجود";
+            series2.ChartArea = "ChartArea1";
+            series2.Legend = "Legend1";
+            series2.Name = "محصولات فروش رفته ";
+            this.Chart.Series.Add(series1);
+            this.Chart.Series.Add(series2);
             this.Chart.Size = new System.Drawing.Size(1028, 519);
             this.Chart.TabIndex = 0;
             this.Chart.Text = "chart1";
             // 
             // WareHousStatusTab2
             // 
+            this.WareHousStatusTab2.Controls.Add(this.panel8);
             this.WareHousStatusTab2.Controls.Add(this.panel7);
             this.WareHousStatusTab2.Location = new System.Drawing.Point(4, 22);
             this.WareHousStatusTab2.Name = "WareHousStatusTab2";
@@ -332,12 +345,49 @@
             this.WareHousStatusTab2.Text = "گزارش انبار 2";
             this.WareHousStatusTab2.UseVisualStyleBackColor = true;
             // 
+            // panel8
+            // 
+            this.panel8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel8.Controls.Add(this.rbtnShowAll);
+            this.panel8.Controls.Add(this.rbtnShowExist);
+            this.panel8.Location = new System.Drawing.Point(664, 12);
+            this.panel8.Name = "panel8";
+            this.panel8.Size = new System.Drawing.Size(360, 26);
+            this.panel8.TabIndex = 4;
+            // 
+            // rbtnShowAll
+            // 
+            this.rbtnShowAll.AutoSize = true;
+            this.rbtnShowAll.Checked = true;
+            this.rbtnShowAll.Location = new System.Drawing.Point(148, 3);
+            this.rbtnShowAll.Name = "rbtnShowAll";
+            this.rbtnShowAll.Size = new System.Drawing.Size(88, 17);
+            this.rbtnShowAll.TabIndex = 2;
+            this.rbtnShowAll.TabStop = true;
+            this.rbtnShowAll.Text = "نمایش کلی ";
+            this.rbtnShowAll.UseVisualStyleBackColor = true;
+            this.rbtnShowAll.CheckedChanged += new System.EventHandler(this.rbtnShowAll_CheckedChanged);
+            // 
+            // rbtnShowExist
+            // 
+            this.rbtnShowExist.AutoSize = true;
+            this.rbtnShowExist.Location = new System.Drawing.Point(242, 3);
+            this.rbtnShowExist.Name = "rbtnShowExist";
+            this.rbtnShowExist.Size = new System.Drawing.Size(111, 17);
+            this.rbtnShowExist.TabIndex = 1;
+            this.rbtnShowExist.Text = "محصولات موجود";
+            this.rbtnShowExist.UseVisualStyleBackColor = true;
+            this.rbtnShowExist.CheckedChanged += new System.EventHandler(this.rbtnShowExist_CheckedChanged);
+            // 
             // panel7
             // 
+            this.panel7.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel7.Controls.Add(this.dgvStoreStatus);
-            this.panel7.Location = new System.Drawing.Point(14, 18);
+            this.panel7.Location = new System.Drawing.Point(14, 44);
             this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(1010, 500);
+            this.panel7.Size = new System.Drawing.Size(1010, 474);
             this.panel7.TabIndex = 0;
             // 
             // dgvStoreStatus
@@ -346,7 +396,7 @@
             this.dgvStoreStatus.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvStoreStatus.Location = new System.Drawing.Point(0, 0);
             this.dgvStoreStatus.Name = "dgvStoreStatus";
-            this.dgvStoreStatus.Size = new System.Drawing.Size(1010, 500);
+            this.dgvStoreStatus.Size = new System.Drawing.Size(1010, 474);
             this.dgvStoreStatus.TabIndex = 0;
             // 
             // ProductsTab
@@ -393,7 +443,7 @@
             this.panel2.Location = new System.Drawing.Point(7, 82);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(1025, 45);
-            this.panel2.TabIndex = 1;
+            this.panel2.TabIndex = 2;
             // 
             // btnAddUpdateProduct
             // 
@@ -499,7 +549,7 @@
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(902, 29);
-            this.tableLayoutPanel1.TabIndex = 18;
+            this.tableLayoutPanel1.TabIndex = 0;
             // 
             // label1
             // 
@@ -521,7 +571,7 @@
             this.txtAddProductQuantity.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtAddProductQuantity.Name = "txtAddProductQuantity";
             this.txtAddProductQuantity.Size = new System.Drawing.Size(186, 22);
-            this.txtAddProductQuantity.TabIndex = 2;
+            this.txtAddProductQuantity.TabIndex = 3;
             // 
             // label3
             // 
@@ -543,7 +593,7 @@
             this.txtAddProductName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtAddProductName.Name = "txtAddProductName";
             this.txtAddProductName.Size = new System.Drawing.Size(278, 22);
-            this.txtAddProductName.TabIndex = 1;
+            this.txtAddProductName.TabIndex = 2;
             // 
             // label2
             // 
@@ -565,7 +615,7 @@
             this.txtAddProductCode.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtAddProductCode.Name = "txtAddProductCode";
             this.txtAddProductCode.Size = new System.Drawing.Size(231, 22);
-            this.txtAddProductCode.TabIndex = 0;
+            this.txtAddProductCode.TabIndex = 1;
             // 
             // btnAddProduct
             // 
@@ -573,7 +623,7 @@
             this.btnAddProduct.Location = new System.Drawing.Point(14, 29);
             this.btnAddProduct.Name = "btnAddProduct";
             this.btnAddProduct.Size = new System.Drawing.Size(82, 29);
-            this.btnAddProduct.TabIndex = 0;
+            this.btnAddProduct.TabIndex = 1;
             this.btnAddProduct.Text = "افزودن";
             this.btnAddProduct.UseVisualStyleBackColor = true;
             this.btnAddProduct.Click += new System.EventHandler(this.btnAddProduct_Click);
@@ -596,6 +646,7 @@
             this.ClientSize = new System.Drawing.Size(1074, 581);
             this.Controls.Add(this.tabControl1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(1090, 620);
             this.Name = "FrmMain";
             this.RightToLeftLayout = true;
@@ -613,6 +664,8 @@
             this.panel6.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Chart)).EndInit();
             this.WareHousStatusTab2.ResumeLayout(false);
+            this.panel8.ResumeLayout(false);
+            this.panel8.PerformLayout();
             this.panel7.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvStoreStatus)).EndInit();
             this.ProductsTab.ResumeLayout(false);
@@ -672,5 +725,8 @@
         private System.Windows.Forms.TabPage WareHousStatusTab2;
         private System.Windows.Forms.Panel panel7;
         private System.Windows.Forms.DataGridView dgvStoreStatus;
+        private System.Windows.Forms.Panel panel8;
+        private System.Windows.Forms.RadioButton rbtnShowAll;
+        private System.Windows.Forms.RadioButton rbtnShowExist;
     }
 }
